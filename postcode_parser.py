@@ -12,6 +12,10 @@ This script downloads raw data from a user-defined google drive and imports it t
 
 DATASETS_DIR = '{path to dataset}'
 
+GDRIVE_SETTINGS_FILE = '{path to settings.yaml file for google drive}'
+GDRIVE_TEAM_ID = 'gdrive id for the team id that data are downloaded from'
+GDRIVE_FOLDER_ID = 'gdrive id for the folder containing postcode data'
+
 DB_HOST = 'HOST'
 DB_PORT = 'DATABASE_PORT'
 DB_USER = 'DATABASE_USER'
@@ -23,7 +27,7 @@ def create_service():
     """
     Creates a connection to google drive using the gdrive settings
     """
-    gauth = GoogleAuth(settings_file='{path_to_gdrive.yaml}')
+    gauth = GoogleAuth(settings_file=GDRIVE_SETTINGS_FILE)
     
     if gauth.credentials is None:
         # Authenticate if they're not there
@@ -88,14 +92,15 @@ class PostcodeParser():
 
 
     def __init__(self):
+        # Initialise all variables
         self.base_path = DATASETS_DIR
         self.staging_table = 'postcode_staging'
         self.geom_table = 'postcode_polygons'
         self.target_table = 'postcode'
         self.vstreet_table = 'vstreet_table'
         self.vstreet_target = 'vstreetlookup'
-        self.folder_id = '{google_folder_id}'
-        self.team_drive_id='{google_team_drive_id}'
+        self.folder_id = GDRIVE_FOLDER_ID
+        self.team_drive_id= GDRIVE_TEAM_ID
 
     def prepare(self):
         # look for the directories necessary for the data to be parsed
